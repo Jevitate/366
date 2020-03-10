@@ -17,10 +17,10 @@
 #include "gtest/gtest.h"
 #include "gmock/gmock.h"
 
-
 #include <string>
 #include <fstream>
 #include <streambuf>
+
 
 #include "common.hpp"
 #include "Server.hpp"
@@ -50,7 +50,6 @@ long get_diff_dist(string file1, string file2){
    dtl::Diff<char, string> d(file1_S, file2_S);
    d.onOnlyEditDistance();
    d.compose();
-
    return d.getEditDistance();
 }
 
@@ -114,7 +113,6 @@ TEST_F(ServerEvaluateShot, Bad_Player_Number_High){
 class ServerProcessShot : public ::testing::Test{
 protected:
     Server srv;
-
     void set_up_shot(unsigned int x, unsigned int y){
         string coords = "{\"x\": "+to_string(x)+",\"y\": "+to_string(y)+"}";
         ofstream shot_file("player_1.shot.json");

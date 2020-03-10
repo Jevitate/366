@@ -17,6 +17,18 @@
 
 #include "common.hpp"
 #include "Server.hpp"
+#include <fstream>
+#include <iostream>
+#include <cereal/archives/json.hpp>
+#include <cereal/types/vector.hpp>
+
+#include <cereal/types/unordered_map.hpp>
+#include <cereal/types/memory.hpp>
+#include <cereal/archives/binary.hpp>
+
+
+#include <string>
+#include <streambuf>
 
 
 /**
@@ -26,19 +38,105 @@
  * @return length of the file in bytes
  */
 int get_file_length(ifstream *file){
+
+    //return 2;
+    //read in file and check x and y lengths to make sure they are square. Then return the length.
 }
 
+char board_1_array[BOARD_SIZE][BOARD_SIZE];
+char board_2_array[BOARD_SIZE][BOARD_SIZE];
 
-void Server::initialize(unsigned int board_size,
-                        string p1_setup_board,
-                        string p2_setup_board){
+void Server::initialize(unsigned int board_size,string p1_setup_board,string p2_setup_board){
+    this -> board_size = board_size;
+    //ifstream *ifs ((ifstream *) "player_1.set.setup_board.txt");
+    //int file_length = get_file_length(ifs);
+    //cout << file_length << "\n";
+
+    if(board_size != BOARD_SIZE){
+        __throw_bad_exception();
+    }
+
+    if(p1_setup_board != "player_1.setup_board.txt" && p2_setup_board != "player_2.setup_board.txt"){
+        __throw_bad_exception();
+    }
+
+    ifstream board_start;
+    board_start.open("player_1.setup_board.txt");
+
+    for(int r = 0; r < BOARD_SIZE; r++){
+        for(int c = 0; c < BOARD_SIZE; c++){
+            board_start >> board_1_array[r][c];
+            //cout << board_1_array[r][c];
+        }
+        //cout << "\n";
+    }
+    board_start.close();
+
+    ifstream board_start2;
+    board_start2.open("player_2.setup_board.txt");
+
+    for(int r = 0; r < BOARD_SIZE; r++){
+        for(int c = 0; c < BOARD_SIZE; c++){
+            board_start2 >> board_2_array[r][c];
+            //cout << board_2_array[r][c];
+        }
+        //cout << "\n";
+    }
+    board_start2.close();
+
 }
 
+int player_result;
 
 int Server::evaluate_shot(unsigned int player, unsigned int x, unsigned int y) {
+    //Out of bounds = 0
+    //Miss = -1
+    //Hit = 1
+    // X are the columns, Y are the Rows, Array is Row by Columns
+    if(player > 2 || player < 1){
+        __throw_bad_exception();
+    }
+
+    if(x >= BOARD_SIZE || y >= BOARD_SIZE){
+        return OUT_OF_BOUNDS;
+    }
+    if(player == 1) {
+        if (board_2_array[y][x] == '_') {
+            return MISS;
+        }
+        else{
+            return HIT;
+        }
+        //if(board_2_array[y][x] != '_'){
+
+        //}
+
+    }
+
 }
 
 
 int Server::process_shot(unsigned int player) {
-   return NO_SHOT_FILE;
+
+    int x;
+    int y;
+
+    if(player > 2 || player < 1){
+        __throw_bad_exception();
+    }
+
+    ifstream shot_file("player_1.shot.json");
+    cereal::JSONInputArchive arch(shot_file);
+    arch(x,y);
+    shot_file.close();
+    //cout << "\n\n" << x << '\n' << y << '\n' << '\n';
+    int result = evaluate_shot(player,x,y);
+    //cout << "\n\n" << result << "\n\n";
+    //remove("player1.result.json");
+    ofstream out_file("player_1.result.json");
+    cereal::JSONOutputArchive archiveOut(out_file);
+    archiveOut(CEREAL_NVP(result));
+
+    remove("player_1.shot.json");
+    return NO_SHOT_FILE;
 }
