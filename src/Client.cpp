@@ -28,6 +28,7 @@ void Client::initialize(unsigned int player, unsigned int board_size){
 
     vector<vector<int> > vec(BOARD_SIZE, vector<int> (BOARD_SIZE,0));
 
+
     // serialize the array
     ofstream array_ofp("player_1.action_board.json"); // create an output file stream
     cereal::JSONOutputArchive write_archive(array_ofp); // initialize an archive on the file

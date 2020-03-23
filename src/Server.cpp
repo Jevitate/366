@@ -53,11 +53,15 @@ void Server::initialize(unsigned int board_size,string p1_setup_board,string p2_
     //cout << file_length << "\n";
 
     if(board_size != BOARD_SIZE){
-        __throw_bad_exception();
+        //__throw_bad_exception();
+        throw ServerException("Wrong");
+
     }
 
-    if(p1_setup_board != "player_1.setup_board.txt" && p2_setup_board != "player_2.setup_board.txt"){
-        __throw_bad_exception();
+
+    if(p1_setup_board != "player_1.setup_board.txt" or p2_setup_board != "player_2.setup_board.txt"){
+        throw ServerException("Bad Player Board");
+        //__throw_bad_exception();
     }
 
     ifstream board_start;
@@ -94,7 +98,8 @@ int Server::evaluate_shot(unsigned int player, unsigned int x, unsigned int y) {
     //Hit = 1
     // X are the columns, Y are the Rows, Array is Row by Columns
     if(player > 2 || player < 1){
-        __throw_bad_exception();
+        throw ServerException("Bad player number");
+        //__throw_bad_exception();
     }
 
     if(x >= BOARD_SIZE || y >= BOARD_SIZE){
@@ -122,7 +127,8 @@ int Server::process_shot(unsigned int player) {
     int y;
 
     if(player > 2 || player < 1){
-        __throw_bad_exception();
+        throw ServerException("Bad player Number");
+        //__throw_bad_exception();
     }
 
     ifstream shot_file("player_1.shot.json");
