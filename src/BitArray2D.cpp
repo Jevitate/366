@@ -16,8 +16,14 @@
 
 #include <math.h>
 #include "BitArray2D.hpp"
+#include "common.hpp"
 
 BitArray2D::BitArray2D(unsigned int rows, unsigned int columns) {
+
+  if(rows != BOARD_SIZE or columns != BOARD_SIZE){
+    throw BitArray2DException("Wrong");
+  }
+
 
 }
 

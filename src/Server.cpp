@@ -43,6 +43,14 @@ int get_file_length(ifstream *file){
     //read in file and check x and y lengths to make sure they are square. Then return the length.
 }
 
+Server::~Server() {
+}
+
+BitArray2D *Server::scan_setup_board(string setup_board_name){
+}
+
+
+
 char board_1_array[BOARD_SIZE][BOARD_SIZE];
 char board_2_array[BOARD_SIZE][BOARD_SIZE];
 
