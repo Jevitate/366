@@ -18,32 +18,55 @@
 #include "BitArray2D.hpp"
 #include "common.hpp"
 
+
+
 BitArray2D::BitArray2D(unsigned int rows, unsigned int columns) {
 
-  if(rows != BOARD_SIZE or columns != BOARD_SIZE){
+  if(rows == 0 or columns == 0){
     throw BitArray2DException("Wrong");
   }
+  this -> columns = columns;
+  this -> rows = rows;
+  array = (char*)calloc(rows*columns, sizeof(char));
+  //array = "0010001001010101";
 
+  //calloc(100,100);
+
+  //array = &array[rows * columns];
+  //typedef char memoryBitBoard[columns];
+  //memoryBitBoard BitBoard[rows];
+
+  //*array = *BitBoard;
+  //A[Row][Column]
+  //&A[i][j] = Xa + L(C * i + j)
 
 }
 
 
 BitArray2D::~BitArray2D() {
-
+  //Deallocate Memory
+  //Don't Touch
 }
 
 
 bool BitArray2D::get(unsigned int row, unsigned int column){
    // check array bounds
+  if(row < 0 or row >= BOARD_SIZE or column < 0 or column >= BOARD_SIZE){
+    throw BitArray2DException("Wrong");
+  }
 
    // get the element
    return get_bit_elem(array, columns, row, column);
+
 }
 
 
 
 void BitArray2D::set(unsigned int row, unsigned int column){
    // check array bounds
+  if(row < 0 or row >= BOARD_SIZE or column < 0 or column >= BOARD_SIZE){
+    throw BitArray2DException("Wrong");
+  }
 
    // set the element
    set_bit_elem(array, columns, row, column);

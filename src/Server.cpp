@@ -38,21 +38,49 @@
  * @return length of the file in bytes
  */
 int get_file_length(ifstream *file){
-
     //return 2;
     //read in file and check x and y lengths to make sure they are square. Then return the length.
 }
 
+char board_1_array[BOARD_SIZE][BOARD_SIZE];
+char board_2_array[BOARD_SIZE][BOARD_SIZE];
+
+char BitBoard1[BOARD_SIZE][BOARD_SIZE];
+char BitBoard2[BOARD_SIZE][BOARD_SIZE];
+
 Server::~Server() {
+  //Deallocate Memory
+  //Don't Touch
 }
 
 BitArray2D *Server::scan_setup_board(string setup_board_name){
+
+  //ifstream board_start;
+  //board_start.open("player_1.setup_board.txt");
+  //&A[i][j] = Xa + L(C * i + j)
+  p1_setup_board = new BitArray2D(BOARD_SIZE,BOARD_SIZE);
+  p2_setup_board = new BitArray2D(BOARD_SIZE,BOARD_SIZE);
+
+  for(int r = 0; r < BOARD_SIZE; r++){
+    for(int c = 0; c < BOARD_SIZE; c++){
+      //set up bit board array
+      if(board_2_array[r][c] != '_'){
+        //BitBoard1[r][c] = '1';
+        p2_setup_board->set(r,c);
+        //cout << p1_setup_board->get(r,c);
+      }else{
+        //BitBoard1[r][c] = '0';
+        //cout << BitBoard1[r][c];
+      }
+      }
+    //cout << "\n";
+  }
+
 }
 
 
 
-char board_1_array[BOARD_SIZE][BOARD_SIZE];
-char board_2_array[BOARD_SIZE][BOARD_SIZE];
+
 
 void Server::initialize(unsigned int board_size,string p1_setup_board,string p2_setup_board){
     this -> board_size = board_size;
@@ -96,6 +124,11 @@ void Server::initialize(unsigned int board_size,string p1_setup_board,string p2_
     }
     board_start2.close();
 
+
+
+    scan_setup_board("sometin");
+    //scan_setup_board("player_2.setup_board.txt");
+
 }
 
 int player_result;
@@ -110,21 +143,30 @@ int Server::evaluate_shot(unsigned int player, unsigned int x, unsigned int y) {
         //__throw_bad_exception();
     }
 
+
     if(x >= BOARD_SIZE || y >= BOARD_SIZE){
         return OUT_OF_BOUNDS;
     }
-    if(player == 1) {
-        if (board_2_array[y][x] == '_') {
-            return MISS;
-        }
-        else{
-            return HIT;
-        }
-        //if(board_2_array[y][x] != '_'){
-
-        //}
-
+    if(player == 1){
+      if(p2_setup_board->get(y,x) == 0){
+        return MISS;
+      }
+      else{
+        return HIT;
+      }
     }
+//    if(player == 1) {
+//        if (board_2_array[y][x] == '_') {
+//            return MISS;
+//        }
+//        else{
+//            return HIT;
+//        }
+//        //if(board_2_array[y][x] != '_'){
+//
+//        //}
+//
+//    }
 
 }
 
